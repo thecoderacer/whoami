@@ -1,26 +1,174 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================================
+   PALETTE
+   Dark-first system. `prussian-blue` is the ground, `neon-ice` the highlight,
+   `tropical-teal` the working accent. Every shade is registered so utilities
+   like `bg-prussian-blue-500` / `text-neon-ice-400` generate automatically.
+   ========================================================================= */
+@theme {
+  /* prussian_blue */
+  --color-prussian-blue-100: #020409;
+  --color-prussian-blue-200: #050812;
+  --color-prussian-blue-300: #070c1b;
+  --color-prussian-blue-400: #091024;
+  --color-prussian-blue-500: #0b132b;
+  --color-prussian-blue-600: #1e3475;
+  --color-prussian-blue-700: #3154bd;
+  --color-prussian-blue-800: #6f89da;
+  --color-prussian-blue-900: #b7c4ec;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* space_indigo */
+  --color-space-indigo-100: #06070d;
+  --color-space-indigo-200: #0b0f1a;
+  --color-space-indigo-300: #111627;
+  --color-space-indigo-400: #161d33;
+  --color-space-indigo-500: #1c2541;
+  --color-space-indigo-600: #35467b;
+  --color-space-indigo-700: #4f68b4;
+  --color-space-indigo-800: #8a9bcd;
+  --color-space-indigo-900: #c4cde6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* dusk_blue */
+  --color-dusk-blue-100: #0b1015;
+  --color-dusk-blue-200: #17202a;
+  --color-dusk-blue-300: #222f40;
+  --color-dusk-blue-400: #2e3f55;
+  --color-dusk-blue-500: #3a506b;
+  --color-dusk-blue-600: #517197;
+  --color-dusk-blue-700: #7894b6;
+  --color-dusk-blue-800: #a5b8ce;
+  --color-dusk-blue-900: #d2dbe7;
+
+  /* tropical_teal */
+  --color-tropical-teal-100: #102828;
+  --color-tropical-teal-200: #1f5150;
+  --color-tropical-teal-300: #2f7978;
+  --color-tropical-teal-400: #3fa2a0;
+  --color-tropical-teal-500: #5bc0be;
+  --color-tropical-teal-600: #7bccca;
+  --color-tropical-teal-700: #9cd8d7;
+  --color-tropical-teal-800: #bde5e5;
+  --color-tropical-teal-900: #def2f2;
+
+  /* neon_ice */
+  --color-neon-ice-100: #00493e;
+  --color-neon-ice-200: #00937d;
+  --color-neon-ice-300: #00dcbb;
+  --color-neon-ice-400: #27ffdf;
+  --color-neon-ice-500: #6fffe9;
+  --color-neon-ice-600: #8dffee;
+  --color-neon-ice-700: #a9fff2;
+  --color-neon-ice-800: #c6fff6;
+  --color-neon-ice-900: #e2fffb;
+
+  /* Fonts supplied by next/font in layout.tsx */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Animations. Only transform/opacity are animated — both GPU-composited. */
+  --animate-blink: blink 1.1s step-end infinite;
+  --animate-drift: drift 30s linear infinite;
+  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(0, -60px, 0);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================================
+   BASE
+   ========================================================================= */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keeps anchor targets clear of the sticky nav. */
+    scroll-padding-top: 5.5rem;
+    background-color: var(--color-prussian-blue-500);
+  }
+
+  body {
+    background-color: var(--color-prussian-blue-500);
+    color: var(--color-dusk-blue-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-prussian-blue-900);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible focus everywhere. Never remove without replacing. */
+  :focus-visible {
+    outline: 2px solid var(--color-neon-ice-500);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-tropical-teal-500);
+    color: var(--color-prussian-blue-500);
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   Everything animated on this page stops here. The terminal keeps working —
+   it is functional, not decorative.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom scrollbar — subtle, matches the palette. */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-dusk-blue-500) transparent;
+  }
 }

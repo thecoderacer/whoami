@@ -15,7 +15,7 @@ export type Stat = {
 
 export const site = {
   name: "Anggara Pratama",
-  title: "Senior Full Stack Software Engineer | Team Lead",
+  title: "Senior Software Engineer | Team Lead",
   company: "MileApp",
 
   location: "Bandung, West Java, Indonesia",
